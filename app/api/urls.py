@@ -1,6 +1,7 @@
 from django.urls import path
-from . import controllers
+from api.views import department
 
 urlpatterns = [
-    path('', controllers.index, name='index')
+    path('department', department.index, name='index'),
+    path('department/<int:pk>', department.index_detail, name='index')
 ]
