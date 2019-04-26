@@ -1,9 +1,13 @@
 from django.urls import path
-from api.views import department, employee
+from rest_framework.urlpatterns import format_suffix_patterns
+from api.views.employee import EmployeeView
+from api.views.department import DepartmentView
 
 urlpatterns = [
-    path('department', department.index, name='index'),
-    path('department/<int:pk>', department.index_detail, name='index_detail'),
-    path('employee', employee.index, name='index'),
-    path('employee/<int:pk>', employee.index_detail, name='index_detail')
+    path('department/', DepartmentView.as_view()),
+    path('department/<int:pk>', DepartmentView.as_view()),
+    path('employee/', EmployeeView.as_view()),
+    path('employee/<int:pk>', EmployeeView.as_view())
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

@@ -16,11 +16,6 @@ class Employee(models.Model):
         blank=True,
         null=True
     )
-
-    def __init__(self, name, email, department):
-        self.name = name
-        self.email = email
-        self.departament = department
         
     def __str__(self):
         return self.name

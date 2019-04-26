@@ -1,48 +1,44 @@
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError, APIException
+from django.http import Http404
 from api.models import Department
 from api.serializers import DepartmentSerializer
 
-def get(request):
-    deps = Department.objects.all()
-    serializer = DepartmentSerializer(deps, many=True)
-    return JsonResponse(serializer.data, safe=False)
+class DepartmentView(APIView):
+    def get(self, request, format=None):
+        deps = Department.objects.all()
+        serializer = DepartmentSerializer(deps, many=True)
+        return Response(serializer.data)
 
-def get_one(pk):
-    dep = Department.objects.get(pk=pk)
-    serializer = DepartmentSerializer(dep, many=False)
-    return JsonResponse(serializer.data, safe=False)
+    def get_object(self, request, pk, format=None):
+        try:
+            dep = Department.objects.get(pk=pk)
+            serializer = DepartmentSerializer(dep, many=False)
+            return Response(serializer.data)
+        except Department.DoesNotExist:
+            raise Http404
 
-def post(request):
-    data = JSONParser().parse(request)
-    serializer = DepartmentSerializer(data=data)
-    if (serializer.is_valid()):
-        serializer.save()
-        return JsonResponse(serializer.data, status=201)
-    return JsonResponse(serializer.errors, status=400)
+    def post(self, request, format=None):
+        data = JSONParser().parse(request)
+        serializer = DepartmentSerializer(data=data)
+        if (serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
-def put(request, id):
-    return HttpResponse(status=500, content="Not implemented")
+    def put(self, request, pk, format=None):
+        data = JSONParser().parse(request)
+        dep = Department.objects.get(pk=pk)
+        serializer = DepartmentSerializer(dep, data=data)
+        if (serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=400)
 
-def delete(pk):
-    dep = Department.objects.get(pk=pk)
-    dep.delete()
-    return HttpResponse(status=204)
-
-@csrf_exempt
-def index(request):
-    if (request.method == 'GET'):
-        return get(request)
-    elif (request.method == 'POST'):
-        return post(request)
-
-@csrf_exempt
-def index_detail(request, pk):
-    if (request.method == 'GET'):
-        return get_one(pk)
-    elif (request.method == 'PUT'):
-        return put(request, pk)
-    elif (request.method == 'DELETE'):
-        return delete(pk)
+    def delete(self, request, pk, format=None):
+        dep = Department.objects.get(pk=pk)
+        dep.delete()
+        return Response(status=204)
