@@ -10,7 +10,7 @@ class Department(models.Model):
 class Employee(models.Model):
     name = models.CharField(max_length=64)
     email = models.CharField(max_length=48)
-    departament = models.ForeignKey(
+    department = models.ForeignKey(
         Department,
         on_delete=models.SET_NULL,
         blank=True,
