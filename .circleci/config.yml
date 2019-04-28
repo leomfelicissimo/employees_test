@@ -1,15 +1,41 @@
 # Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
 version: 2.1
 
-# Use a package of configuration called an orb, see https://circleci.com/docs/2.0/orb-intro/
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.3.1
+jobs:
+	build_and_test:
+		working_directory: ~/employees_app
+		docker:
+            - image: circleci/python:3.7.3
+			environment:
+				DATABASE_NAME: employees
+					DATABASE_USER: employees
+					DATABASE_PASSWORD: dev@123
+					DATABASE_HOST: db
+					DATABASE_PORT: 5432	
+            - image: circleci/postgres
+            environment:
+                POSTGRES_USER: employees
+                POSTGRES_PASSWORD: dev@123
+        steps:
+            - checkout
+            - run: sudo chown -R circleci:circleci /usr/local/bin
+            - run: sudo chown -R circleci:circleci /usr/local/lib/python-3.7/site-packages
+            - restore_cache:
+                key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - save_cache:
+                key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+                paths:
+                    - ".venv"
+                    - "/usr/local/bin"
+                    - "/usr/local/lib/python3.7/site-packages"
+            - run: python manage.py test
+            - store_test_results:
+                path: test-results
+            - store_artifacts:
+                path: test-results
+                destination: trl
 
-# Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
-workflows:
-  # Name the workflow "Welcome"
-  Welcome:
-    # Run the welcome/run job in its own container
-    jobs:
-      - welcome/run
+
+
+
+
