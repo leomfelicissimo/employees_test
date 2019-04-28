@@ -10,7 +10,7 @@ jobs:
           DATABASE_NAME: employees
           DATABASE_USER: employees
           DATABASE_PASSWORD: dev@123
-          DATABASE_HOST: db
+          DATABASE_HOST: localhost
           DATABASE_PORT: "5432"
       - image: circleci/postgres
         environment:
@@ -18,13 +18,20 @@ jobs:
           POSTGRES_PASSWORD: dev@123
     steps:
       - checkout
-      - run: sudo chown -R circleci:circleci /usr/local/bin
-      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
       - run:
+          name: Chown CircleCI Binary
+          command: sudo chown -R circleci:circleci /usr/local/bin
+      - run:
+          name: Chown CircleCI Python Packages
+          command: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+      - run:
+          name: Install requirements
           working_directory: ~/employees_app/app
           command: |
             pip install -r requirements.txt
-            python manage.py test
+      - run:
+          name: Execute tests
+          command: python manage.py test
       - store_test_results:
           path: test-results
       - store_artifacts:
