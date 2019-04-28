@@ -20,8 +20,11 @@ jobs:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
-      - run: pip install -r app/requirements.txt
-      - run: python manage.py test
+      - run:
+        working_directory: ~/employees_app/app
+        command: |
+          pip install -r requirements.txt
+          python manage.py test
       - store_test_results:
           path: test-results
       - store_artifacts:
