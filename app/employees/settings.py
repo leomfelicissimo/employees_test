@@ -23,9 +23,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')40_f^!oco&lcet7%f3_)(p_x(@v3n&b#dbcf4mniv65^r77mm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('PROD', 'False') == 'False'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '0.0.0.0',
+]
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -86,11 +90,11 @@ WSGI_APPLICATION = 'employees.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'employees',
-        'USER': 'empsapp',
-        'PASSWORD': 'dev@123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ.get('DATABASE_NAME', 'employees'),
+        'USER': os.environ.get('DATABASE_USER', 'employees'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'dev@123'),
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+        'PORT': os.environ.get('DATABASE_PORT', 5432),
     }
 }
 
@@ -131,4 +135,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATIC_URL = '/static/'
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
