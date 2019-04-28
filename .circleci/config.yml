@@ -31,9 +31,11 @@ jobs:
       - run:
           name: Execute tests
           working_directory: ~/employees_app/app
-          command: python manage.py test
+          command: |
+            mkdir -p /tmp/test-results
+            python manage.py test
       - store_test_results:
-          path: test-results
+          path: /tmp/test-results
       - store_artifacts:
-          path: test-results
+          path: /tmp/test-results
           destination: trl
