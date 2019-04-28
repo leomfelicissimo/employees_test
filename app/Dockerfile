@@ -1,7 +1,7 @@
-FROM python:3.7.3-slim-stretch
+FROM python:3.7.3-alpine
 ENV PYTHONUNBUFFERED 1
-RUN mkdir /employees_app
-WORKDIR /employees_app
-COPY requirements.txt /employees_app/
+RUN mkdir /code
+WORKDIR /code
+COPY requirements.txt /code/
 RUN pip install -r requirements.txt
-COPY . /employees_app/
+COPY . /code/

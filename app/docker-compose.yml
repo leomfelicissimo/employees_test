@@ -5,39 +5,18 @@ services:
 
     db:
         image: postgres:alpine
-        container_name: empdb
         environment:
-            POSTGRES_USER: employees
-            POSTGRES_PASSWORD: dev@123
+        POSTGRES_USER: empsapp
+        POSTGRES_PASSWORD: dev@123
         ports:
-            - "5432"
+            - "5432:5432"
     web:
-        container_name: empapp
         build: .
-        ports:
-            - "8000"
+        command: python manage.py runserver 0.0.0.0:8000
         volumes:
-            - .:/employees_app
-            - ./static/:/employees_app/static
-        environment:
-            DATABASE_NAME: employees
-            DATABASE_USER: employees
-            DATABASE_PASSWORD: dev@123
-            DATABASE_HOST: db
-            DATABASE_PORT: 5432
-            PROD: 'True'
-        depends_on:
-            - db
-        command: bash -c "python manage.py collectstatic --no-input && python manage.py migrate && gunicorn employees.wsgi -b 0.0.0.0:8000"
-    nginx:
-        image: nginx:alpine
-        container_name: empsrv
-        volumes:
-            - ./nginx.conf:/etc/nginx/nginx.conf
-            - ./static/:/employees_app/static
+            - .:/code
         ports:
             - "8000:8000"
         depends_on:
-            - web
-        
+            - db
     
