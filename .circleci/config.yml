@@ -2,16 +2,16 @@
 version: 2.1
 
 jobs:
-	build_and_test:
-		working_directory: ~/employees_app
-		docker:
+    build_and_test:
+        working_directory: ~/employees_app
+        docker:
             - image: circleci/python:3.7.3
-			environment:
-				DATABASE_NAME: employees
-					DATABASE_USER: employees
-					DATABASE_PASSWORD: dev@123
-					DATABASE_HOST: db
-					DATABASE_PORT: 5432	
+            environment:
+                DATABASE_NAME: employees
+                    DATABASE_USER: employees
+                    DATABASE_PASSWORD: dev@123
+                    DATABASE_HOST: db
+                    DATABASE_PORT: 5432	
             - image: circleci/postgres
             environment:
                 POSTGRES_USER: employees
@@ -34,8 +34,3 @@ jobs:
             - store_artifacts:
                 path: test-results
                 destination: trl
-
-
-
-
-
