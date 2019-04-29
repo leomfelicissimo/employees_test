@@ -12,9 +12,7 @@ class Employee(models.Model):
     email = models.CharField(max_length=48)
     department = models.ForeignKey(
         Department,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True
+        on_delete=models.PROTECT
     )
         
     def __str__(self):

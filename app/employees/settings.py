@@ -86,7 +86,6 @@ WSGI_APPLICATION = 'employees.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# TODO: Load configs from yml
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
