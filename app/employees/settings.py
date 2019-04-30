@@ -86,17 +86,25 @@ WSGI_APPLICATION = 'employees.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME', 'employees'),
-        'USER': os.environ.get('DATABASE_USER', 'employees'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'dev@123'),
-        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
-        'PORT': os.environ.get('DATABASE_PORT', 5432),
-    }
+POSTGRES_CONFIG = {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': os.environ.get('DATABASE_NAME', 'employees'),
+    'USER': os.environ.get('DATABASE_USER', 'employees'),
+    'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'dev@123'),
+    'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+    'PORT': os.environ.get('DATABASE_PORT', 5432),
 }
 
+SQLITE_CONFIG = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+}
+
+DATABASE_PROVIDER = os.environ.get('DATABASE_PROVIDER', 'sqlite')
+
+DATABASES = {
+    'default': POSTGRES_CONFIG if DATABASE_PROVIDER == 'postgres' else SQLITE_CONFIG
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

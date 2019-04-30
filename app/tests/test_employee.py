@@ -45,9 +45,9 @@ class EmployeeTests(TestCase):
         self.assertTrue(status.is_success(r.status_code))
 
     def test_create_validation_error(self):
-        """Should'nt create new departament returning 400 error"""
+        """Shouldn't create new departament returning 400 error"""
         request = self.factory.post(self.url, data={
-            'email', 'emp@emp.com.br'
+            'email': 'emp@emp.com.br',
         }, content_type=self.json)
         r = EmployeeList.as_view()(request)
         self.assertTrue(status.is_client_error(r.status_code))

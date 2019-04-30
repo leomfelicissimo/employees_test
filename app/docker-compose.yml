@@ -20,6 +20,7 @@ services:
             - .:/employees_app
             - ./static/:/employees_app/static
         environment:
+            DATABASE_PROVIDER: postgres
             DATABASE_NAME: employees
             DATABASE_USER: employees
             DATABASE_PASSWORD: dev@123
